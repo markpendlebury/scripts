@@ -1,2 +1,5 @@
 # scripts
-A collection of scripts and aliases i use on a day to day within my zsh terminal
+A collection of scripts and aliases I use on a day to day within my zsh terminal
+
+
+
