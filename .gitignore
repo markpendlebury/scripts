@@ -1,1 +1,3 @@
 clients/*
+utils/servers.sh
+utils/repos.sh
