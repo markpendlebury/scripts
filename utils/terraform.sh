@@ -1,42 +1,69 @@
-#!/bin/zsh
+#!/bin/bash
 
-alias tfi='terraform init'
 
-tfp() {
-        if [ -z $1 ]; then
-                terraform plan
+# A Collection of functions to assist in working with Terraform
+# Each function has two possible options, one utilises a basic 
+# terraform configuration and the other utilises specific 
+# environment variables
+
+
+
+# Terraform init
+tfi(){
+        if [ -z "$1" ]; then
+                rm -rf .terraform && rm -f .terraform.lock.hcl
+                terraform init
         else
-                terraform plan -var-file=environment/$1/variables.tfvars
+                rm -rf .terraform && rm -f .terraform.lock.hcl
+                terraform init --var-file=environment/"$1"/variables.tfvars --backend-config=environment/"$1"/state.tfvars 
         fi
 }
 
+# Terraform plan
+tfp() {
+        if [ -z "$1" ]; then
+                terraform plan
+        else
+                terraform plan -var-file=environment/"$1"/variables.tfvars
+        fi
+}
+
+# Terraform apply
 tfa() {
-        if [ -z $1 ]; then
+        if [ -z "$1" ]; then
                 terraform apply
         else
-                terraform apply -var-file=environment/$1/variables.tfvars
+                terraform apply -var-file=environment/"$1"/variables.tfvars
         fi
 }
 
+# Terraform destroy
 tfd() {
-        if [ -z $1 ]; then
+        if [ -z "$1" ]; then
                 terraform destroy
         else
-                terraform destroy -var-file=environment/$1/variables.tfvars
+                terraform destroy -var-file=environment/"$1"/variables.tfvars
         fi
 }
 
+
+# This function utilises https://cost.modules.tf, 
 tfcost() {
         echo "Calulating cost estimate..."
-        if [ -z $1 ]; then
-                terraform plan
+        if [ -z "$1" ]; then
+                terraform plan -out=plan.tfplan > /dev/null
         else
-                terraform plan -var-file=environment/$1/variables.tfvars > /dev/null
+                terraform plan -var-file=environment/"$1"/variables.tfvars -out=plan.tfplan > /dev/null
         fi
         terraform show -json plan.tfplan | curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf | jq
 }
 
-# switch terraform version
+
+
+
+# This function adds the ability to easily install and switch 
+# to specific versions of terraform
+
 tfswitch() {
         export LOCAL_BIN=~/.tfswitch/bin
 
@@ -46,17 +73,17 @@ tfswitch() {
 
         echo "Switching to Terraform version: $1..."
 
-        TF_BINARY=$LOCAL_BIN/terraform_$1
+        TF_BINARY=$LOCAL_BIN/terraform_"$1"
 
-        if [ ! -f $TF_BINARY ]; then
-                wget -q -O $LOCAL_BIN/terraform_$1.zip https://releases.hashicorp.com/terraform/$1/terraform_$1_linux_amd64.zip
-                unzip -qq $LOCAL_BIN/terraform_$1.zip -d $LOCAL_BIN
-                mv $LOCAL_BIN/terraform $LOCAL_BIN/terraform_$1
-                sudo chmod +x $TF_BINARY
-                rm $LOCAL_BIN/terraform_$1.zip
+        if [ ! -f "$TF_BINARY" ]; then
+                wget -q -O $LOCAL_BIN/terraform_"$1".zip https://releases.hashicorp.com/terraform/"$1"/terraform_"$1"_linux_amd64.zip
+                unzip -qq $LOCAL_BIN/terraform_"$1".zip -d $LOCAL_BIN
+                mv $LOCAL_BIN/terraform $LOCAL_BIN/terraform_"$1"
+                sudo chmod +x "$TF_BINARY"
+                rm $LOCAL_BIN/terraform_"$1".zip
         fi
 
         unlink ~/.local/bin/terraform
-        ln $TF_BINARY ~/.local/bin/terraform
+        ln "$TF_BINARY" ~/.local/bin/terraform
         echo "Done!"
 }
