@@ -8,22 +8,18 @@
 #
 #
 # Approle auth is desienged to be used via a deployment pipeline and
-# requires passing a VAULT_ROLE_ID and VAULT_SECRET_ID,
+# requires settings VAULT_ROLE_ID and VAULT_SECRET_ID environment variables,
 # once successfully authenticated the script will export
 # a valid VAULT_TOKEN environment variable allowing you to use this
-# to make additional requests such as retrieving secrets etc
+# to make additional requests to vault
 #
-# Example:
-# vault.login.approle {VAULT_APPROLE_ID} {VAULT_SECRET_ID}
 #
-# Ldap authentication is designed to be used during a local development process
-# and requires a username to be passed into the script.
+# userpass authentication is designed to be used during a local development process
+# and requires a VAULT_USERNAME environment variable to be set
 # During the process you will be prompted to enter your vault password
 #
-# Example:
-# vault.login.ldap {USERNAME}
 
-# This function will retrieve a VAULT_TOKEN from vault via
+# This function will export a VAULT_TOKEN from vault via
 # the approle auth method
 vault.login.approle() {
     # Check we have the required parameter values
@@ -37,8 +33,8 @@ vault.login.approle() {
     fi
 }
 
-# This function will retrieve a VAULT_TOKEN from vault via
-# the LDAP auth method
+# This function will export a VAULT_TOKEN from vault via
+# the userpass auth method
 vault.login() {
 
     # Check we have a username value
@@ -58,6 +54,8 @@ vault.login() {
     fi
 }
 
+# This function uses vaults aws secrets engine to configure an aws profile (~/.aws/credentials)
+
 vault.login.aws.base() {
     if [[ -z $VAULT_TOKEN ]]; then
         echo "Vault token not found, Please authenticate with vault first"
@@ -66,6 +64,7 @@ vault.login.aws.base() {
     fi
 }
 
+# Helper function to check variables have been set correctly
 check() {
     # Check if VAULT_TOKEN is empty or null
     if [[ -z $VAULT_TOKEN || $VAULT_TOKEN != "null" ]]; then
@@ -77,9 +76,10 @@ check() {
     fi
 }
 
-startup() {
-    # Set required environment variables:
+# Startup script, here we check if we have vault client installed
+# if not, we install it
 
+startup() {
     # init script and check we have vault
     # If not, install it
     if ! vault --version &>/dev/null; then
