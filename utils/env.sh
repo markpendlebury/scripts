@@ -6,11 +6,6 @@
 init() {
     # Disable POWERLEVEL9k crapping itsself if we output
     typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
-
-    # Configure environment vars
-    for FILE in "$BASEDIR"/environment/*.sh; do
-        source "$FILE"
-    done
 }
 
 # Here we unload the environment variables
