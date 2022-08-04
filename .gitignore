@@ -4,3 +4,5 @@ utils/repos.sh
 utils/load.sh
 environment/ont
 */environment_variables.sh
+environment/ccom/environment_variables.sh
+environment/elesoft/environment_variables.sh
