@@ -13,7 +13,7 @@ getcredentials() {
 
     if [ -z "$1" ]; then
         echo "Usage: getcredentials {accountname}"
-        return
+        # return
     fi
 
     wipe_tokens
@@ -24,7 +24,7 @@ getcredentials() {
     # if $ACCOUNT_ID is empty, exit the script
     if [ -z "$ACCOUNT_ID" ]; then
         echo "Error getting target account id"
-        return
+        # return
     fi
 
     # Repeat the process for sec and org
@@ -33,7 +33,7 @@ getcredentials() {
     # if $ORG_ACCOUNT_ID is empty, exit the script
     if [ -z "$ORG_ACCOUNT_ID" ]; then
         echo "Error getting ORG account ID"
-        return
+        # return
     fi
 
     # Authenticate as admin with the root account:
@@ -65,7 +65,7 @@ authenticate() {
     # if $AWS_CREDENTIALS is empty, exit the script
     if [ -z "$AWS_CREDENTIALS" ]; then
         echo "Error during assume role on $ACCOUNT_ID"
-        return 
+        # return 
     fi
 
     # Use JQ to parse the json contained within AWS_CREDENTIALS to get the AccessKeyId value

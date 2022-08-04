@@ -46,7 +46,6 @@ tfd() {
         fi
 }
 
-
 # This function utilises https://cost.modules.tf, 
 tfcost() {
         echo "Calulating cost estimate..."
