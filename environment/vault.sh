@@ -45,7 +45,6 @@ vault.login() {
     # read -rs VAULT_PASSWORD
     # echo ""
 
-    CLIENT=ONT
     export VAULT_USERNAME=$(bw list items | jq -r '.[] | select(.name=="Vault-'$CLIENT'")' | jq -r '.login.username')
     export VAULT_PASSWORD=$(bw list items | jq -r '.[] | select(.name=="Vault-'$CLIENT'")' | jq -r '.login.password')
     export VAULT_ADDR=$(bw list items | jq -r '.[] | select(.name=="Vault-'$CLIENT'")' | jq -r '.login.uris[].uri')
