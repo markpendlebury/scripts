@@ -37,21 +37,24 @@ vault.login.approle() {
 # the userpass auth method
 vault.login() {
 
-    # Check we have a username value
-    if [[ -z "$VAULT_USERNAME" ]]; then
-        echo "Missing or invalid Vault Username"
-    else
-        echo "Logging into vault with user: $VAULT_USERNAME"
-        # Ask the user for their password
-        echo -n "Vault password: "
-        # Read silently (don't output the password to terminal duh!)
-        read -rs VAULT_PASSWORD
-        echo ""
-        # Request client token from vault:
-        VAULT_TOKEN=$(vault login --method=userpass username="$VAULT_USERNAME" password="$VAULT_PASSWORD" --format=json | jq -r '.auth.client_token')
-        # Call the check function
-        check
-    fi
+    bw_login
+
+    # Ask the user for their password
+    # echo -n "Vault password: "
+    # Read silently (don't output the password to terminal duh!)
+    # read -rs VAULT_PASSWORD
+    # echo ""
+
+    CLIENT=ONT
+    export VAULT_USERNAME=$(bw list items | jq -r '.[] | select(.name=="Vault-'$CLIENT'")' | jq -r '.login.username')
+    export VAULT_PASSWORD=$(bw list items | jq -r '.[] | select(.name=="Vault-'$CLIENT'")' | jq -r '.login.password')
+    export VAULT_ADDR=$(bw list items | jq -r '.[] | select(.name=="Vault-'$CLIENT'")' | jq -r '.login.uris[].uri')
+
+    echo "Logging into vault with user: $VAULT_USERNAME"
+    # Request client token from vault:
+    VAULT_TOKEN=$(vault login --method=ldap username="$VAULT_USERNAME" password="$VAULT_PASSWORD" --format=json | jq -r '.auth.client_token')
+    # Call the check function
+    check
 }
 
 # This function uses vaults aws secrets engine to configure an aws profile (~/.aws/credentials)
@@ -129,6 +132,5 @@ vault.generate.random() {
         echo "$BYTES"
     fi
 }
-
 
 startup
