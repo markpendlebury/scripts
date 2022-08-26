@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 
 # Get Credentials function
 # Usage from a terminal call: getcredentials {accountname}

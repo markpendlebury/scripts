@@ -29,6 +29,10 @@ unload() {
     unset TF_VAR_vault_skip_verify
     unset TF_VAR_vault_profile
     unset TF_VAR_vault_role
+    unset BW_USERNAME
+    unset BW_PASSWORD
+    unset SEEDBOX_VPN_PASSWORD
+    unset CLIENT
 }
 
 # Unload existing variables:
