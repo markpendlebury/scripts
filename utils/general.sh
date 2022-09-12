@@ -15,5 +15,5 @@ clipboard() {
         echo "The contents of $1 are now in your clipboard"
 }
 
-alias bootwin='sudo efibootmgr --bootnext 0 && sudo reboot'
+alias bootwin='sudo efibootmgr --bootnext 1 && sudo reboot'
 
