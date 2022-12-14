@@ -8,3 +8,5 @@ environment/ccom/environment_variables.sh
 environment/elesoft/environment_variables.sh
 *seedbox.sh
 *.creds
+environment/environment_variables_global.sh
+environment/global_vars.sh

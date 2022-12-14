@@ -6,7 +6,7 @@ alias weather='curl wttr.in/$POSTCODE'
 # mkdir and cd into it:
 mkcdir() {
         mkdir -p -- "$1" &&
-        cd -P -- "$1" || exit
+                cd -P -- "$1" || exit
 }
 
 # Copy the contents of a file to clipboard using xclip:
@@ -17,3 +17,7 @@ clipboard() {
 
 alias bootwin='sudo efibootmgr --bootnext 1 && sudo reboot'
 
+source $BASEDIR/environment/global_vars.sh
+
+# Fix here for dotnet core 6+ issues with open ssl :
+export CLR_OPENSSL_VERSION_OVERRIDE=1.1

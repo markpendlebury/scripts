@@ -33,6 +33,13 @@ unload() {
     unset BW_PASSWORD
     unset SEEDBOX_VPN_PASSWORD
     unset CLIENT
+    unset CODEBUILD_ROLE
+    unset SESSION_PROFILE
+    unset ORG_ACCOUNT
+    unset TF_VAR_vault_approle_role_id
+    unset TF_VAR_vault_approle_secret_id
+    unset SEEDBOX_PASSWORD
+    unset SEEDBOX_USER
 }
 
 # Unload existing variables:

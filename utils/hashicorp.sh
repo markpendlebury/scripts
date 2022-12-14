@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This function calles my hashiversion api which 
+# This function calls my hashiversion api which 
 # returns the latest version number for a 
 # specified hashicorp product
 

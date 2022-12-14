@@ -1,21 +1,18 @@
 #!/bin/bash
 
-
 # A Collection of functions to assist in working with Terraform
-# Each function has two possible options, one utilises a basic 
-# terraform configuration and the other utilises specific 
+# Each function has two possible options, one utilises a basic
+# terraform configuration and the other utilises specific
 # environment variables
 
-
-
 # Terraform init
-tfi(){
+tfi() {
         if [ -z "$1" ]; then
                 rm -rf .terraform && rm -f .terraform.lock.hcl
                 terraform init
         else
                 rm -rf .terraform && rm -f .terraform.lock.hcl
-                terraform init --var-file=environment/"$1"/variables.tfvars --backend-config=environment/"$1"/state.tfvars 
+                terraform init --var-file=environment/"$1"/variables.tfvars --backend-config=environment/"$1"/state.tfvars
         fi
 }
 
@@ -26,6 +23,34 @@ tfp() {
         else
                 terraform plan -var-file=environment/"$1"/variables.tfvars
         fi
+}
+
+# Terraform plan all environment:
+tfp.all() {
+        for d in environment/*; do
+                ALIAS="${d#environment/}"
+                figlet $ALIAS
+                getcredentials ont-$ALIAS
+
+                rm -rf .terraform .terraform.lock.hcl
+                terraform init --backend-config=environment/$ALIAS/state.tfvars
+                terraform plan --var-file=environment/$ALIAS/variables.tfvars
+        done
+}
+
+# Terraform apply all environments:
+tfa.all() {
+        for d in environment/*; do
+                clear
+                ALIAS="${d#environment/}"
+                figlet $ALIAS
+                getcredentials ont-$ALIAS
+
+                rm -rf .terraform .terraform.lock.hcl
+                terraform init --backend-config=environment/$ALIAS/state.tfvars
+                terraform apply --var-file=environment/$ALIAS/variables.tfvars
+
+        done
 }
 
 # Terraform apply
@@ -46,21 +71,18 @@ tfd() {
         fi
 }
 
-# This function utilises https://cost.modules.tf, 
+# This function utilises https://cost.modules.tf,
 tfcost() {
         echo "Calulating cost estimate..."
         if [ -z "$1" ]; then
-                terraform plan -out=plan.tfplan > /dev/null
+                terraform plan -out=plan.tfplan >/dev/null
         else
-                terraform plan -var-file=environment/"$1"/variables.tfvars -out=plan.tfplan > /dev/null
+                terraform plan -var-file=environment/"$1"/variables.tfvars -out=plan.tfplan >/dev/null
         fi
         terraform show -json plan.tfplan | curl -s -X POST -H "Content-Type: application/json" -d @- https://cost.modules.tf | jq
 }
 
-
-
-
-# This function adds the ability to easily install and switch 
+# This function adds the ability to easily install and switch
 # to specific versions of terraform
 
 tfswitch() {

@@ -9,6 +9,7 @@
 #
 getcredentials() {
 
+
     TARGET_ACCOUNT_ALIAS="$1"
     if [ -z "$1" ]; then
         echo "Usage: getcredentials {accountname}"
@@ -59,36 +60,6 @@ getcredentials() {
 
     fi
 }
-
-# authenticate() {
-#     echo "Authenticating with account $1 using $2 and $3"
-
-#     # Use the above returned ACCOUNT_ID to assume role for the requested account
-#     AWS_CREDENTIALS=$(aws sts assume-role --role-arn arn:aws:iam::"$1":role/"$2" --role-session-name "$3" --profile "$PROFILE")
-
-#     # error checking
-#     # if $AWS_CREDENTIALS is empty, exit the script
-#     if [ -z "$AWS_CREDENTIALS" ]; then
-#         echo "Error during assume role on $TARGET_ACCOUNT"
-#         # return
-#     fi
-
-#     # Use JQ to parse the json contained within AWS_CREDENTIALS to get the AccessKeyId value
-#     AWS_ACCESS_KEY_ID=$(echo "$AWS_CREDENTIALS" | jq '.Credentials.AccessKeyId' | tr -d '"')
-#     # Use JQ to parse the json contained within AWS_CREDENTIALS to get the SecretAccessKey value
-#     AWS_SECRET_ACCESS_KEY=$(echo "$AWS_CREDENTIALS" | jq '.Credentials.SecretAccessKey' | tr -d '"')
-#     # Use JQ to parse the json contained within AWS_CREDENTIALS to get the SessionToken value
-#     # AWS_SESSION_TOKEN=$(echo "$AWS_CREDENTIALS" | jq '.Credentials.SessionToken' | tr -d '"')
-#     # Assign the default region
-#     AWS_DEFAULT_REGION=eu-west-1
-
-#     # Create a working profile with the above aws credentials:
-#     aws configure set aws_access_key_id "$AWS_ACCESS_KEY_ID" --profile "$SESSION_PROFILE"
-#     aws configure set aws_secret_access_key "$AWS_SECRET_ACCESS_KEY" --profile "$SESSION_PROFILE"
-#     # aws configure set aws_session_token "$AWS_SESSION_TOKEN" --profile "$SESSION_PROFILE"
-#     aws configure set aws_default_region "$AWS_DEFAULT_REGION" --profile "$SESSION_PROFILE"
-
-# }
 
 # Utility function used to clear out the
 # aws related environment variables
