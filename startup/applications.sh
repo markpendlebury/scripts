@@ -11,7 +11,7 @@ startup() {
     # Is today a weekday?
      if [[ $(date +%u) -lt 6 ]]; then
         # Is the current time between 6am and 4pm?
-        if [[ "$CURRENT_TIME" > "06:00" ]] || [[ "$CURRENT_TIME" < "16:00" ]]; then
+        if [[ "$CURRENT_TIME" > "06:00" ]] && [[ "$CURRENT_TIME" < "16:00" ]]; then
             # Load the work profile
             work
         fi
