@@ -51,7 +51,7 @@ vault.login() {
 
     echo "Logging into vault with user: $VAULT_USERNAME"
     # Request client token from vault:
-    VAULT_TOKEN=$(vault login --method=ldap username="$VAULT_USERNAME" password="$VAULT_PASSWORD" --format=json | jq -r '.auth.client_token')
+    VAULT_TOKEN=$(vault login --method=userpass username="$VAULT_USERNAME" password="$VAULT_PASSWORD" --format=json | jq -r '.auth.client_token')
     # Call the check function
     check
 }
