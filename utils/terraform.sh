@@ -86,7 +86,14 @@ tfcost() {
 # to specific versions of terraform
 
 tfswitch() {
-        export LOCAL_BIN=~/.tfswitch/bin
+        LOCAL_BIN=~/.tfswitch/bin
+        SYS_BIN=/usr/local/bin
+
+        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+                ARCH=linux_amd64
+        elif [[ "$OSTYPE" == "darwin"* ]]; then
+                ARCH=darwin_amd64
+        fi
 
         if [ ! -d $LOCAL_BIN ]; then
                 mkdir -p $LOCAL_BIN
@@ -97,14 +104,14 @@ tfswitch() {
         TF_BINARY=$LOCAL_BIN/terraform_"$1"
 
         if [ ! -f "$TF_BINARY" ]; then
-                wget -q -O $LOCAL_BIN/terraform_"$1".zip https://releases.hashicorp.com/terraform/"$1"/terraform_"$1"_linux_amd64.zip
+                wget -q -O $LOCAL_BIN/terraform_"$1".zip https://releases.hashicorp.com/terraform/"$1"/terraform_"$1"_"$ARCH".zip
                 unzip -qq $LOCAL_BIN/terraform_"$1".zip -d $LOCAL_BIN
                 mv $LOCAL_BIN/terraform $LOCAL_BIN/terraform_"$1"
                 sudo chmod +x "$TF_BINARY"
                 rm $LOCAL_BIN/terraform_"$1".zip
         fi
 
-        unlink ~/.local/bin/terraform
-        ln "$TF_BINARY" ~/.local/bin/terraform
+        sudo unlink $SYS_BIN/terraform
+        sudo ln "$TF_BINARY" $SYS_BIN/terraform
         echo "Done!"
 }
